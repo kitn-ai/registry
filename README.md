@@ -162,6 +162,37 @@ registry/
 
 Each component lives in its own directory under `components/<type>/<name>/`. The `manifest.json` declares the component's metadata and lists which files to include. The build script reads these manifests, bundles the source code into the `files` array, and writes the output to `r/`.
 
-## Monorepo
+## Contributing
 
-This package is part of the [kitn monorepo](../README.md).
+### Prerequisites
+
+- [Bun](https://bun.sh) runtime
+- [Claude Code](https://claude.com/claude-code) (recommended -- provides guided workflows)
+
+### Creating a Component
+
+1. Decide on the type (`agent`, `tool`, `skill`, or `storage`) and name
+2. Create the directory under `components/<type>/<name>/`
+3. Add `manifest.json` and source files following existing patterns
+4. Run `bun run validate` to check imports and dependencies
+5. Run `bun run build` to generate the `r/` output
+6. Run `bun test` to verify schema tests pass
+
+If using Claude Code, run `/create-component` for guided scaffolding that handles naming conventions, manifest fields, and templates automatically.
+
+### Updating a Component
+
+1. Modify source files in `components/<type>/<name>/`
+2. Bump the version in `manifest.json` and add a changelog entry
+3. Run `bun run validate && bun run build && bun test`
+
+If using Claude Code, run `/update-component` for a guided workflow.
+
+### PR Checklist
+
+- `bun run validate` passes
+- `bun run build` passes
+- `bun test` passes
+- `registryDependencies` are correct for any cross-component imports
+- Changelog entry added with new version and today's date
+- Built `r/` output is committed
