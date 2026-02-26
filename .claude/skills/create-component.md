@@ -48,19 +48,31 @@ Ask the user for these details (suggest defaults where possible):
 
 **Source file template (`<name>-agent.ts`):**
 ```typescript
+import { registerAgent } from "@kitn/core";
+
 const SYSTEM_PROMPT = `You are a <description> agent.
 
 <instructions for the agent>`;
 
-export const <UPPER_SNAKE_NAME>_AGENT_CONFIG = {
+registerAgent({
+  name: "<name>-agent",
+  description: "<description>",
   system: SYSTEM_PROMPT,
   tools: {},
-};
+});
 ```
 
-If the agent uses tools from registryDependencies, import them:
+If the agent uses tools from registryDependencies, import them and pass to `tools`:
 ```typescript
+import { registerAgent } from "@kitn/core";
 import { someTool } from "@kitn/tools/<toolfile>.js";
+
+registerAgent({
+  name: "<name>-agent",
+  description: "<description>",
+  system: SYSTEM_PROMPT,
+  tools: { someTool },
+});
 ```
 
 ---
@@ -94,6 +106,7 @@ import { someTool } from "@kitn/tools/<toolfile>.js";
 
 **Source file template (`<name>.ts`):**
 ```typescript
+import { registerTool } from "@kitn/core";
 import { tool } from "ai";
 import { z } from "zod";
 
@@ -105,6 +118,15 @@ export const <camelCaseName>Tool = tool({
   execute: async (input) => {
     // implement tool logic
   },
+});
+
+registerTool({
+  name: "<name>-tool",
+  description: "<tool description>",
+  inputSchema: z.object({
+    // same schema as above
+  }),
+  tool: <camelCaseName>Tool,
 });
 ```
 
@@ -233,6 +255,8 @@ git commit -m "feat: add <name> <type>"
 - [ ] `files` array in manifest matches actual file names
 - [ ] Dependencies are correct (`ai` for agents, `ai` + `zod` for tools)
 - [ ] registryDependencies lists any imported kitn components
+- [ ] Agents call `registerAgent()` from `@kitn/core`
+- [ ] Tools call `registerTool()` from `@kitn/core`
 - [ ] Imports use `@kitn/<type>/<file>.js` for cross-type, relative for same-directory
 - [ ] All imports have `.js` extension
 - [ ] Changelog has initial entry with today's date

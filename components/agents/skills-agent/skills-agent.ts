@@ -1,3 +1,4 @@
+import { registerAgent } from "@kitn/core";
 import { tool } from "ai";
 import { z } from "zod";
 
@@ -103,7 +104,9 @@ const deleteSkillTool = tool({
   },
 });
 
-export const SKILLS_AGENT_CONFIG = {
+registerAgent({
+  name: "skills-agent",
+  description: "Skills management agent that creates, edits, and manages behavioral skills for other agents",
   system: SYSTEM_PROMPT,
   tools: {
     listSkills: listSkillsTool,
@@ -112,4 +115,4 @@ export const SKILLS_AGENT_CONFIG = {
     updateSkill: updateSkillTool,
     deleteSkill: deleteSkillTool,
   },
-};
+});

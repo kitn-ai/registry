@@ -1,3 +1,4 @@
+import { registerAgent } from "@kitn/core";
 import {
   hackernewsTopStoriesTool,
   hackernewsStoryDetailTool,
@@ -13,10 +14,12 @@ When asked about Hacker News:
 
 Present information in an engaging, tech-news style.`;
 
-export const HACKERNEWS_AGENT_CONFIG = {
+registerAgent({
+  name: "hackernews-agent",
+  description: "Hacker News analyst agent that fetches and presents trending tech stories",
   system: SYSTEM_PROMPT,
   tools: {
     getTopStories: hackernewsTopStoriesTool,
     getStoryDetail: hackernewsStoryDetailTool,
   },
-};
+});

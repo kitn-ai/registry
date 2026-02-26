@@ -1,3 +1,4 @@
+import { registerAgent } from "@kitn/core";
 import { tool } from "ai";
 import { z } from "zod";
 import vm from "node:vm";
@@ -82,7 +83,9 @@ const executeCodeTool = tool({
   },
 });
 
-export const CODING_AGENT_CONFIG = {
+registerAgent({
+  name: "coding-agent",
+  description: "Code generation and execution agent with sandboxed JavaScript runtime",
   system: SYSTEM_PROMPT,
   tools: { executeCode: executeCodeTool },
-};
+});

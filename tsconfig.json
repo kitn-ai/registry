@@ -8,6 +8,7 @@
     "skipLibCheck": true,
     "noEmit": true,
     "paths": {
+      "@kitn/core": ["./_stubs/core.d.ts"],
       "@kitn/agents/*": ["./_staging/agents/*"],
       "@kitn/tools/*": ["./_staging/tools/*"],
       "@kitn/skills/*": ["./_staging/skills/*"],

@@ -1,3 +1,4 @@
+import { registerAgent } from "@kitn/core";
 import { z } from "zod";
 
 const classificationSchema = z.object({
@@ -31,10 +32,11 @@ Guidelines:
 - Note when professional advice should be sought for complex situations
 - Keep responses concise but thorough`;
 
-export const GUARDRAILS_AGENT_CONFIG = {
-  classificationSchema,
-  classificationPrompt: CLASSIFICATION_PROMPT,
-  advicePrompt: FINANCE_ADVISOR_PROMPT,
+registerAgent({
+  name: "guardrails-agent",
+  description: "Guardrails finance advisor that classifies input before generating advice, blocking off-topic queries",
   system: CLASSIFICATION_PROMPT,
-  tools: {} as Record<string, never>,
-};
+  tools: {},
+});
+
+export { classificationSchema, FINANCE_ADVISOR_PROMPT };

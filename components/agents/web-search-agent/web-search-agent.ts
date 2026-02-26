@@ -1,3 +1,4 @@
+import { registerAgent } from "@kitn/core";
 import { searchWebTool } from "@kitn/tools/web-search.js";
 import { fetchPageTool, getPageMetaTool } from "@kitn/tools/web-fetch.js";
 
@@ -20,11 +21,13 @@ Always:
 - Be upfront if search results are limited or inconclusive
 - Use fetchPage selectively -- only on the most relevant 1-2 URLs, not every result`;
 
-export const WEB_SEARCH_AGENT_CONFIG = {
+registerAgent({
+  name: "web-search-agent",
+  description: "Web search specialist agent using Brave Search with page fetching and OpenGraph extraction",
   system: SYSTEM_PROMPT,
   tools: {
     searchWeb: searchWebTool,
     fetchPage: fetchPageTool,
     getPageMeta: getPageMetaTool,
   },
-};
+});

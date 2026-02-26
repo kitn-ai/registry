@@ -6,6 +6,7 @@
  * and configuration shape -- the actual routing logic lives in your server
  * framework layer.
  */
+import { registerAgent } from "@kitn/core";
 
 const SYSTEM_PROMPT = `You are a supervisor agent that routes user queries to the appropriate specialist agent.
 
@@ -41,9 +42,11 @@ export interface SupervisorAgentConfig {
   autonomous?: boolean;
 }
 
-export const SUPERVISOR_AGENT_CONFIG = {
+registerAgent({
+  name: "supervisor-agent",
+  description: "Supervisor agent that routes queries to specialist agents and orchestrates parallel task execution",
   system: SYSTEM_PROMPT,
   tools: {},
-};
+});
 
 export { SYSTEM_PROMPT as SUPERVISOR_SYSTEM_PROMPT };

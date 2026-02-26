@@ -1,3 +1,4 @@
+import { registerAgent } from "@kitn/core";
 import { tool } from "ai";
 import { z } from "zod";
 
@@ -39,7 +40,9 @@ const proposalTools = {
   }),
 };
 
-export const HUMAN_IN_LOOP_AGENT_CONFIG = {
+registerAgent({
+  name: "human-in-loop-agent",
+  description: "Agent that proposes actions for human approval before executing them",
   system: SYSTEM_PROMPT,
   tools: proposalTools,
-};
+});

@@ -1,3 +1,4 @@
+import { registerTool } from "@kitn/core";
 import { tool } from "ai";
 import { z } from "zod";
 
@@ -102,4 +103,16 @@ export const weatherTool = tool({
       timezone: weatherData.timezone,
     };
   },
+});
+
+registerTool({
+  name: "weather-tool",
+  description:
+    "Get current weather information for a location. Returns temperature, humidity, wind speed, and conditions.",
+  inputSchema: z.object({
+    location: z
+      .string()
+      .describe("City name or location (e.g. 'Tokyo', 'New York')"),
+  }),
+  tool: weatherTool,
 });

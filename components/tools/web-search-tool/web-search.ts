@@ -1,3 +1,4 @@
+import { registerTool } from "@kitn/core";
 import { tool } from "ai";
 import { z } from "zod";
 
@@ -77,4 +78,20 @@ export const searchWebTool = tool({
       ),
     };
   },
+});
+
+registerTool({
+  name: "web-search-tool",
+  description:
+    "Search the web using Brave Search. Returns a list of results with titles, URLs, and descriptions.",
+  inputSchema: z.object({
+    query: z.string().describe("The search query"),
+    count: z
+      .number()
+      .min(1)
+      .max(10)
+      .default(5)
+      .describe("Number of results to return (1-10, default 5)"),
+  }),
+  tool: searchWebTool,
 });

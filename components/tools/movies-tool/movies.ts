@@ -1,3 +1,4 @@
+import { registerTool } from "@kitn/core";
 import { tool } from "ai";
 import { z } from "zod";
 
@@ -81,4 +82,24 @@ export const movieDetailTool = tool({
       homepage: m.homepage ?? null,
     };
   },
+});
+
+registerTool({
+  name: "movie-search-tool",
+  description:
+    "Search for movies by title, keywords, or description. Returns a list of matching movies with ratings.",
+  inputSchema: z.object({
+    query: z.string().describe("Movie search query (title, keywords, etc.)"),
+  }),
+  tool: movieSearchTool,
+});
+
+registerTool({
+  name: "movie-detail-tool",
+  description:
+    "Get detailed information about a specific movie by its TMDB ID.",
+  inputSchema: z.object({
+    movieId: z.number().describe("The TMDB movie ID"),
+  }),
+  tool: movieDetailTool,
 });

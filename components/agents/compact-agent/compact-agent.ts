@@ -1,3 +1,5 @@
+import { registerAgent } from "@kitn/core";
+
 const SYSTEM_PROMPT = `You are a conversation compaction agent. Your job is to take a long, verbose conversation and compress it into a concise summary that preserves all essential information.
 
 Rules:
@@ -11,7 +13,9 @@ Rules:
 
 Format your output as a compact context block that could replace the full conversation history.`;
 
-export const COMPACT_AGENT_CONFIG = {
+registerAgent({
+  name: "compact-agent",
+  description: "Conversation compaction agent that summarizes verbose conversations into concise context blocks",
   system: SYSTEM_PROMPT,
-  tools: {} as Record<string, never>,
-};
+  tools: {},
+});

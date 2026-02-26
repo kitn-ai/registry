@@ -1,3 +1,4 @@
+import { registerAgent } from "@kitn/core";
 import { tool } from "ai";
 import { z } from "zod";
 
@@ -59,11 +60,13 @@ const listMemoriesTool = tool({
   },
 });
 
-export const MEMORY_AGENT_CONFIG = {
+registerAgent({
+  name: "memory-agent",
+  description: "Memory-enabled agent that saves and recalls information across conversations",
   system: SYSTEM_PROMPT,
   tools: {
     saveMemory: saveMemoryTool,
     recallMemory: recallMemoryTool,
     listMemories: listMemoriesTool,
   },
-};
+});

@@ -1,3 +1,4 @@
+import { registerAgent } from "@kitn/core";
 import { z } from "zod";
 
 const SYSTEM_PROMPT = `You are a professional chef and recipe creator. When given a food topic or request, generate a complete, well-structured recipe.
@@ -36,8 +37,9 @@ export const recipeSchema = z.object({
 
 export type Recipe = z.infer<typeof recipeSchema>;
 
-export const RECIPE_AGENT_CONFIG = {
+registerAgent({
+  name: "recipe-agent",
+  description: "Structured output recipe agent that generates complete recipes using generateObject with Zod schema",
   system: SYSTEM_PROMPT,
-  schema: recipeSchema,
-  tools: {} as Record<string, never>,
-};
+  tools: {},
+});

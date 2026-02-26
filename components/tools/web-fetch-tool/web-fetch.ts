@@ -1,3 +1,4 @@
+import { registerTool } from "@kitn/core";
 import { tool } from "ai";
 import { z } from "zod";
 
@@ -126,6 +127,16 @@ export const fetchPageTool = tool({
   },
 });
 
+registerTool({
+  name: "web-fetch-tool",
+  description:
+    "Fetch a web page and extract its readable text content. Use this to get detailed information from a specific URL found via search.",
+  inputSchema: z.object({
+    url: z.string().url().describe("The URL of the page to fetch"),
+  }),
+  tool: fetchPageTool,
+});
+
 export const getPageMetaTool = tool({
   description:
     "Extract OpenGraph metadata from a web page for rich card display. Returns structured data including title, description, image URL, and site name.",
@@ -170,4 +181,14 @@ export const getPageMetaTool = tool({
       clearTimeout(timeout);
     }
   },
+});
+
+registerTool({
+  name: "web-fetch-meta-tool",
+  description:
+    "Extract OpenGraph metadata from a web page for rich card display. Returns structured data including title, description, image URL, and site name.",
+  inputSchema: z.object({
+    url: z.string().url().describe("The URL to extract OpenGraph metadata from"),
+  }),
+  tool: getPageMetaTool,
 });

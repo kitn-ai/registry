@@ -1,3 +1,4 @@
+import { registerTool } from "@kitn/core";
 import { tool } from "ai";
 import { z } from "zod";
 
@@ -83,4 +84,29 @@ export const hackernewsStoryDetailTool = tool({
       topComments: comments.filter(Boolean),
     };
   },
+});
+
+registerTool({
+  name: "hackernews-top-stories-tool",
+  description:
+    "Get the current top stories from Hacker News. Returns a list of stories with titles, scores, and URLs.",
+  inputSchema: z.object({
+    limit: z
+      .number()
+      .min(1)
+      .max(30)
+      .default(10)
+      .describe("Number of top stories to return (max 30)"),
+  }),
+  tool: hackernewsTopStoriesTool,
+});
+
+registerTool({
+  name: "hackernews-story-detail-tool",
+  description:
+    "Get detailed information about a specific Hacker News story by its ID, including top comments.",
+  inputSchema: z.object({
+    storyId: z.number().describe("The Hacker News story ID"),
+  }),
+  tool: hackernewsStoryDetailTool,
 });

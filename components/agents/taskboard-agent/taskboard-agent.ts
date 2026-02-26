@@ -1,3 +1,4 @@
+import { registerAgent } from "@kitn/core";
 import { tool } from "ai";
 import { z } from "zod";
 
@@ -108,7 +109,9 @@ const deleteTaskTool = tool({
   },
 });
 
-export const TASKBOARD_AGENT_CONFIG = {
+registerAgent({
+  name: "taskboard-agent",
+  description: "Task board agent that manages a Kanban board through natural language",
   system: SYSTEM_PROMPT,
   tools: {
     createTask: createTaskTool,
@@ -116,4 +119,4 @@ export const TASKBOARD_AGENT_CONFIG = {
     updateTask: updateTaskTool,
     deleteTask: deleteTaskTool,
   },
-};
+});
