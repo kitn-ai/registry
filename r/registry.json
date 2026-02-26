@@ -6,7 +6,9 @@
       "name": "coding-agent",
       "type": "kitn:agent",
       "description": "Code generation and execution agent with sandboxed JavaScript runtime",
-      "registryDependencies": [],
+      "registryDependencies": [
+        "core"
+      ],
       "categories": [
         "coding",
         "execution"
@@ -15,13 +17,15 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.626Z"
+      "updatedAt": "2026-02-26T23:13:05.515Z"
     },
     {
       "name": "recipe-agent",
       "type": "kitn:agent",
       "description": "Structured output recipe agent that generates complete recipes using generateObject with Zod schema",
-      "registryDependencies": [],
+      "registryDependencies": [
+        "core"
+      ],
       "categories": [
         "structured-output",
         "recipes"
@@ -30,13 +34,14 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.633Z"
+      "updatedAt": "2026-02-26T23:13:05.517Z"
     },
     {
       "name": "supervisor-agent",
       "type": "kitn:agent",
       "description": "Supervisor agent that routes queries to specialist agents and orchestrates parallel task execution",
       "registryDependencies": [
+        "core",
         "weather-agent",
         "hackernews-agent"
       ],
@@ -48,13 +53,15 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.634Z"
+      "updatedAt": "2026-02-26T23:13:05.519Z"
     },
     {
       "name": "human-in-loop-agent",
       "type": "kitn:agent",
       "description": "Agent that proposes actions for human approval before executing them",
-      "registryDependencies": [],
+      "registryDependencies": [
+        "core"
+      ],
       "categories": [
         "human-in-loop",
         "approval",
@@ -64,13 +71,15 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.635Z"
+      "updatedAt": "2026-02-26T23:13:05.520Z"
     },
     {
       "name": "taskboard-agent",
       "type": "kitn:agent",
       "description": "Task board agent that manages a Kanban board through natural language",
-      "registryDependencies": [],
+      "registryDependencies": [
+        "core"
+      ],
       "categories": [
         "tasks",
         "kanban",
@@ -80,13 +89,14 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.635Z"
+      "updatedAt": "2026-02-26T23:13:05.521Z"
     },
     {
       "name": "knowledge-agent",
       "type": "kitn:agent",
       "description": "Movie knowledge and recommendation agent powered by TMDB",
       "registryDependencies": [
+        "core",
         "movies-tool"
       ],
       "categories": [
@@ -97,13 +107,15 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.637Z"
+      "updatedAt": "2026-02-26T23:13:05.521Z"
     },
     {
       "name": "skills-agent",
       "type": "kitn:agent",
       "description": "Skills management agent that creates, edits, and manages behavioral skills for other agents",
-      "registryDependencies": [],
+      "registryDependencies": [
+        "core"
+      ],
       "categories": [
         "skills",
         "management"
@@ -112,13 +124,14 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.638Z"
+      "updatedAt": "2026-02-26T23:13:05.522Z"
     },
     {
       "name": "weather-agent",
       "type": "kitn:agent",
       "description": "Weather specialist agent using Open-Meteo API data",
       "registryDependencies": [
+        "core",
         "weather-tool"
       ],
       "categories": [
@@ -129,13 +142,15 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.639Z"
+      "updatedAt": "2026-02-26T23:13:05.523Z"
     },
     {
       "name": "memory-agent",
       "type": "kitn:agent",
       "description": "Memory-enabled agent that saves and recalls information across conversations",
-      "registryDependencies": [],
+      "registryDependencies": [
+        "core"
+      ],
       "categories": [
         "memory",
         "persistence"
@@ -144,13 +159,15 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.641Z"
+      "updatedAt": "2026-02-26T23:13:05.523Z"
     },
     {
       "name": "guardrails-agent",
       "type": "kitn:agent",
       "description": "Guardrails finance advisor that classifies input before generating advice, blocking off-topic queries",
-      "registryDependencies": [],
+      "registryDependencies": [
+        "core"
+      ],
       "categories": [
         "guardrails",
         "finance",
@@ -160,13 +177,15 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.642Z"
+      "updatedAt": "2026-02-26T23:13:05.524Z"
     },
     {
       "name": "compact-agent",
       "type": "kitn:agent",
       "description": "Conversation compaction agent that summarizes verbose conversations into concise context blocks",
-      "registryDependencies": [],
+      "registryDependencies": [
+        "core"
+      ],
       "categories": [
         "utility",
         "summarization"
@@ -175,13 +194,14 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.642Z"
+      "updatedAt": "2026-02-26T23:13:05.524Z"
     },
     {
       "name": "hackernews-agent",
       "type": "kitn:agent",
       "description": "Hacker News analyst agent that fetches and presents trending tech stories",
       "registryDependencies": [
+        "core",
         "hackernews-tool"
       ],
       "categories": [
@@ -192,13 +212,14 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.643Z"
+      "updatedAt": "2026-02-26T23:13:05.524Z"
     },
     {
       "name": "web-search-agent",
       "type": "kitn:agent",
       "description": "Web search specialist agent using Brave Search with page fetching and OpenGraph extraction",
       "registryDependencies": [
+        "core",
         "web-search-tool",
         "web-fetch-tool"
       ],
@@ -210,13 +231,15 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.644Z"
+      "updatedAt": "2026-02-26T23:13:05.525Z"
     },
     {
       "name": "hackernews-tool",
       "type": "kitn:tool",
       "description": "Fetch top stories and story details from Hacker News via Firebase API",
-      "registryDependencies": [],
+      "registryDependencies": [
+        "core"
+      ],
       "categories": [
         "hackernews",
         "api",
@@ -226,13 +249,15 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.645Z"
+      "updatedAt": "2026-02-26T23:13:05.526Z"
     },
     {
       "name": "movies-tool",
       "type": "kitn:tool",
       "description": "Search and get details for movies using The Movie Database (TMDB) API",
-      "registryDependencies": [],
+      "registryDependencies": [
+        "core"
+      ],
       "categories": [
         "movies",
         "entertainment",
@@ -242,13 +267,15 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.647Z"
+      "updatedAt": "2026-02-26T23:13:05.527Z"
     },
     {
       "name": "web-search-tool",
       "type": "kitn:tool",
       "description": "Search the web using Brave Search API and return structured results",
-      "registryDependencies": [],
+      "registryDependencies": [
+        "core"
+      ],
       "categories": [
         "web",
         "search",
@@ -258,13 +285,15 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.648Z"
+      "updatedAt": "2026-02-26T23:13:05.528Z"
     },
     {
       "name": "weather-tool",
       "type": "kitn:tool",
       "description": "Get current weather information for any location using Open-Meteo API",
-      "registryDependencies": [],
+      "registryDependencies": [
+        "core"
+      ],
       "categories": [
         "weather",
         "api"
@@ -273,13 +302,15 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.649Z"
+      "updatedAt": "2026-02-26T23:13:05.528Z"
     },
     {
       "name": "web-fetch-tool",
       "type": "kitn:tool",
       "description": "Fetch web pages and extract readable text content or OpenGraph metadata",
-      "registryDependencies": [],
+      "registryDependencies": [
+        "core"
+      ],
       "categories": [
         "web",
         "fetch",
@@ -289,7 +320,7 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.650Z"
+      "updatedAt": "2026-02-26T23:13:05.529Z"
     },
     {
       "name": "step-by-step-reasoning",
@@ -305,7 +336,7 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.650Z"
+      "updatedAt": "2026-02-26T23:13:05.530Z"
     },
     {
       "name": "concise-summarizer",
@@ -321,7 +352,7 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.651Z"
+      "updatedAt": "2026-02-26T23:13:05.531Z"
     },
     {
       "name": "fact-check",
@@ -337,7 +368,7 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.652Z"
+      "updatedAt": "2026-02-26T23:13:05.531Z"
     },
     {
       "name": "eli5",
@@ -353,7 +384,7 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.652Z"
+      "updatedAt": "2026-02-26T23:13:05.531Z"
     },
     {
       "name": "pros-and-cons",
@@ -369,7 +400,7 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.653Z"
+      "updatedAt": "2026-02-26T23:13:05.532Z"
     },
     {
       "name": "memory-store",
@@ -385,7 +416,7 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.654Z"
+      "updatedAt": "2026-02-26T23:13:05.532Z"
     },
     {
       "name": "conversation-store",
@@ -401,7 +432,7 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.655Z"
+      "updatedAt": "2026-02-26T23:13:05.533Z"
     },
     {
       "name": "core",
@@ -412,7 +443,7 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.667Z"
+      "updatedAt": "2026-02-26T23:13:05.546Z"
     },
     {
       "name": "hono",
@@ -425,7 +456,7 @@
       "versions": [
         "1.0.0"
       ],
-      "updatedAt": "2026-02-26T21:03:53.673Z"
+      "updatedAt": "2026-02-26T23:13:05.552Z"
     }
   ]
 }

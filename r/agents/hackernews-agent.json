@@ -7,6 +7,7 @@
     "ai"
   ],
   "registryDependencies": [
+    "core",
     "hackernews-tool"
   ],
   "envVars": {},
@@ -23,7 +24,7 @@
     "news"
   ],
   "version": "1.0.0",
-  "updatedAt": "2026-02-26T21:03:53.643Z",
+  "updatedAt": "2026-02-26T23:13:05.524Z",
   "changelog": [
     {
       "version": "1.0.0",

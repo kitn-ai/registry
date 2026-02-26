@@ -46,17 +46,17 @@ export interface ConversationSummary {
  */
 export interface ConversationStore {
   /** Get a conversation by ID. Returns `null` if not found. */
-  get(id: string): Promise<Conversation | null>;
-  /** List all conversations as lightweight summaries. */
-  list(): Promise<ConversationSummary[]>;
+  get(id: string, scopeId?: string): Promise<Conversation | null>;
+  /** List all conversations as lightweight summaries. When scopeId is provided, only scoped conversations are returned. */
+  list(scopeId?: string): Promise<ConversationSummary[]>;
   /** Create a new empty conversation with the given ID. */
-  create(id: string): Promise<Conversation>;
+  create(id: string, scopeId?: string): Promise<Conversation>;
   /** Append a message to a conversation, creating it if necessary. */
-  append(id: string, message: ConversationMessage): Promise<Conversation>;
+  append(id: string, message: ConversationMessage, scopeId?: string): Promise<Conversation>;
   /** Delete a conversation by ID. Returns `true` if it existed. */
-  delete(id: string): Promise<boolean>;
+  delete(id: string, scopeId?: string): Promise<boolean>;
   /** Clear all messages from a conversation, keeping the record. */
-  clear(id: string): Promise<Conversation>;
+  clear(id: string, scopeId?: string): Promise<Conversation>;
 }
 
 // ── Memory Store ──
@@ -78,20 +78,20 @@ export interface MemoryEntry {
  * `loadMemoriesForIds()` aggregates entries across multiple namespaces for context injection.
  */
 export interface MemoryStore {
-  /** List all namespace IDs that contain at least one entry. */
-  listNamespaces(): Promise<string[]>;
-  /** List all entries within a namespace. Returns empty array if namespace doesn't exist. */
-  listEntries(namespaceId: string): Promise<MemoryEntry[]>;
+  /** List all namespace IDs that contain at least one entry. When scopeId is provided, only scoped namespaces are returned. */
+  listNamespaces(scopeId?: string): Promise<string[]>;
+  /** List all entries within a namespace. Returns empty array if namespace doesn't exist. When scopeId is provided, only scoped entries are returned. */
+  listEntries(namespaceId: string, scopeId?: string): Promise<MemoryEntry[]>;
   /** Create or update a memory entry. The namespace is created implicitly. */
-  saveEntry(namespaceId: string, key: string, value: string, context?: string): Promise<MemoryEntry>;
+  saveEntry(namespaceId: string, key: string, value: string, context?: string, scopeId?: string): Promise<MemoryEntry>;
   /** Get a single entry by namespace + key. Returns `null` if not found. */
-  getEntry(namespaceId: string, key: string): Promise<MemoryEntry | null>;
+  getEntry(namespaceId: string, key: string, scopeId?: string): Promise<MemoryEntry | null>;
   /** Delete a single entry. Returns `true` if it existed. */
-  deleteEntry(namespaceId: string, key: string): Promise<boolean>;
+  deleteEntry(namespaceId: string, key: string, scopeId?: string): Promise<boolean>;
   /** Remove all entries in a namespace. */
-  clearNamespace(namespaceId: string): Promise<void>;
+  clearNamespace(namespaceId: string, scopeId?: string): Promise<void>;
   /** Load entries from multiple namespaces at once, tagged with their namespace. */
-  loadMemoriesForIds(ids: string[]): Promise<Array<MemoryEntry & { namespace: string }>>;
+  loadMemoriesForIds(ids: string[], scopeId?: string): Promise<Array<MemoryEntry & { namespace: string }>>;
 }
 
 // ── Skill Store ──
@@ -209,15 +209,45 @@ export interface AudioEntry {
  */
 export interface AudioStore {
   /** Save an audio buffer and return its entry metadata. */
-  saveAudio(buffer: Buffer | Uint8Array, mimeType: string, metadata?: Record<string, unknown>): Promise<AudioEntry>;
+  saveAudio(buffer: Buffer | Uint8Array, mimeType: string, metadata?: Record<string, unknown>, scopeId?: string): Promise<AudioEntry>;
   /** Retrieve an audio file by ID. Returns `null` if not found. */
-  getAudio(id: string): Promise<{ entry: AudioEntry; data: Buffer } | null>;
+  getAudio(id: string, scopeId?: string): Promise<{ entry: AudioEntry; data: Buffer } | null>;
   /** Delete an audio file by ID. Returns `true` if it existed. */
-  deleteAudio(id: string): Promise<boolean>;
-  /** List all stored audio entries. */
-  listAudio(): Promise<AudioEntry[]>;
+  deleteAudio(id: string, scopeId?: string): Promise<boolean>;
+  /** List all stored audio entries. When scopeId is provided, only scoped entries are returned. */
+  listAudio(scopeId?: string): Promise<AudioEntry[]>;
   /** Remove audio entries older than `maxAgeMs` milliseconds. Returns count of deleted entries. */
-  cleanupOlderThan(maxAgeMs: number): Promise<number>;
+  cleanupOlderThan(maxAgeMs: number, scopeId?: string): Promise<number>;
+}
+
+// ── Command Store ──
+
+/** A registered command definition for the command execution system */
+export interface CommandRegistration {
+  name: string;
+  description: string;
+  system: string;
+  tools?: string[];
+  model?: string;
+  format?: "json" | "sse";
+}
+
+/**
+ * Stores and retrieves command registrations.
+ *
+ * Commands are named configurations that pair a system prompt with tools
+ * and model settings. All methods accept an optional `scopeId` for
+ * multi-tenant scoping — when omitted, commands are stored in the global scope.
+ */
+export interface CommandStore {
+  /** List all commands in the given scope (or global scope when omitted). */
+  list(scopeId?: string): Promise<CommandRegistration[]>;
+  /** Get a command by name within the given scope. Returns `undefined` if not found. */
+  get(name: string, scopeId?: string): Promise<CommandRegistration | undefined>;
+  /** Save (create or overwrite) a command in the given scope. */
+  save(command: CommandRegistration, scopeId?: string): Promise<void>;
+  /** Delete a command by name within the given scope. */
+  delete(name: string, scopeId?: string): Promise<void>;
 }
 
 // ── Combined Storage Provider ──
@@ -239,7 +269,7 @@ export interface AudioStore {
  *   prompts: new PostgresPromptStore(db),
  *   audio: new S3AudioStore(bucket),
  * };
- * const plugin = createAIPlugin({ getModel, storage });
+ * const plugin = createAIPlugin({ model, storage });
  * ```
  */
 export interface StorageProvider {
@@ -249,4 +279,5 @@ export interface StorageProvider {
   tasks: TaskStore;
   prompts: PromptStore;
   audio: AudioStore;
+  commands: CommandStore;
 }

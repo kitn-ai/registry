@@ -7,7 +7,9 @@
     "ai",
     "zod"
   ],
-  "registryDependencies": [],
+  "registryDependencies": [
+    "core"
+  ],
   "envVars": {},
   "files": [
     {
@@ -23,7 +25,7 @@
     "news"
   ],
   "version": "1.0.0",
-  "updatedAt": "2026-02-26T21:03:53.645Z",
+  "updatedAt": "2026-02-26T23:13:05.526Z",
   "changelog": [
     {
       "version": "1.0.0",

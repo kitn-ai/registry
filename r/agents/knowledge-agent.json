@@ -7,6 +7,7 @@
     "ai"
   ],
   "registryDependencies": [
+    "core",
     "movies-tool"
   ],
   "envVars": {},
@@ -23,7 +24,7 @@
     "entertainment"
   ],
   "version": "1.0.0",
-  "updatedAt": "2026-02-26T21:03:53.637Z",
+  "updatedAt": "2026-02-26T23:13:05.521Z",
   "changelog": [
     {
       "version": "1.0.0",

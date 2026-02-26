@@ -24,6 +24,7 @@ import { createMemoryRoutes } from "./routes/memory/memory.routes.js";
 import { createSkillsRoutes } from "./routes/skills/skills.routes.js";
 import { createConversationsRoutes } from "./routes/conversations/conversations.routes.js";
 import { createVoiceRoutes } from "./routes/voice/voice.routes.js";
+import { createCommandsRoutes } from "./routes/commands/commands.routes.js";
 
 export function createAIPlugin(config: AIPluginConfig): AIPluginInstance {
   if (config.memoryStore) {
@@ -44,7 +45,7 @@ export function createAIPlugin(config: AIPluginConfig): AIPluginInstance {
     agents,
     tools,
     storage,
-    getModel: config.getModel,
+    model: config.model,
     voice,
     cards,
     maxDelegationDepth: config.maxDelegationDepth ?? DEFAULTS.MAX_DELEGATION_DEPTH,
@@ -59,6 +60,23 @@ export function createAIPlugin(config: AIPluginConfig): AIPluginInstance {
     if (err instanceof HTTPException) {
       return c.json({ error: err.message }, err.status);
     }
+
+    // Surface AI SDK errors (auth failures, rate limits, bad requests, etc.)
+    if (err.name?.startsWith("AI_")) {
+      const aiErr = err as any;
+      const status = aiErr.statusCode ?? 500;
+      const upstream = aiErr.responseBody
+        ? (() => { try { return JSON.parse(aiErr.responseBody); } catch { return undefined; } })()
+        : undefined;
+      const code = status >= 400 && status < 500 ? status : 502;
+      console.error(`[ai-plugin] AI provider error (${status}):`, err.message);
+      return c.json({
+        error: err.message,
+        ...(aiErr.url && { url: aiErr.url }),
+        ...(upstream && { upstream }),
+      }, code as any);
+    }
+
     console.error(err);
     return c.json({ error: "Internal Server Error" }, 500);
   });
@@ -77,6 +95,7 @@ export function createAIPlugin(config: AIPluginConfig): AIPluginInstance {
   app.route("/memory", createMemoryRoutes(ctx));
   app.route("/skills", createSkillsRoutes(ctx));
   app.route("/conversations", createConversationsRoutes(ctx));
+  app.route("/commands", createCommandsRoutes(ctx));
 
   // Conditionally mount voice routes
   if (voice) {

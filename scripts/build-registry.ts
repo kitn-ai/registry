@@ -28,6 +28,22 @@ const typeToDir: Record<ComponentType, string> = {
   "kitn:package": "package",
 };
 
+/**
+ * Rewrite monorepo package imports to user-facing tsconfig aliases.
+ * e.g. `@kitnai/core` → `@kitn/core`, `@kitnai/hono` → `@kitn/routes`
+ */
+const PACKAGE_IMPORT_REWRITES: Record<string, string> = {
+  "@kitnai/core": "@kitn/core",
+  "@kitnai/hono": "@kitn/routes",
+};
+
+function rewritePackageImports(content: string): string {
+  for (const [from, to] of Object.entries(PACKAGE_IMPORT_REWRITES)) {
+    content = content.replaceAll(from, to);
+  }
+  return content;
+}
+
 async function readDirRecursive(dir: string, base = ""): Promise<string[]> {
   const { readdir, stat } = await import("fs/promises");
   const { join } = await import("path");
@@ -151,7 +167,8 @@ if (import.meta.main) {
         const tsFiles = await readDirRecursive(srcDir);
         for (const relPath of tsFiles) {
           if (exclude.has(relPath)) continue;
-          fileContents[relPath] = await readFile(join(srcDir, relPath), "utf-8");
+          const raw = await readFile(join(srcDir, relPath), "utf-8");
+          fileContents[relPath] = rewritePackageImports(raw);
         }
       } else {
         // Regular component: read listed files

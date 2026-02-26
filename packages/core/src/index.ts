@@ -5,6 +5,13 @@ export type { AgentRequest, CoreConfig, PluginContext, ResilienceConfig, Fallbac
 export { AgentRegistry } from "./registry/agent-registry.js";
 export { ToolRegistry } from "./registry/tool-registry.js";
 export { makeRegistryHandlers, makeRegistryStreamHandler, makeRegistryJsonHandler, generateConversationId } from "./registry/handler-factories.js";
+export {
+  registerAgent, registerTool, registerCommand, registerSkill,
+  registerWithPlugin,
+} from "./registry/self-register.js";
+export type {
+  AgentSelfRegConfig, ToolSelfRegConfig, CommandSelfRegConfig, SkillSelfRegConfig,
+} from "./registry/self-register.js";
 export type { AgentRegistration, AgentHandler, ActionRegistration, GuardResult } from "./registry/agent-registry.js";
 export type { ToolRegistration } from "./registry/tool-registry.js";
 
@@ -66,6 +73,8 @@ export type {
   PromptOverride,
   AudioStore,
   AudioEntry,
+  CommandRegistration,
+  CommandStore,
 } from "./storage/interfaces.js";
 export { createFileStorage } from "./storage/file-storage/index.js";
 export type { FileStorageOptions } from "./storage/file-storage/index.js";
@@ -93,6 +102,7 @@ export type { CompactionResult } from "./utils/compaction.js";
 export { loadConversationWithCompaction } from "./utils/conversation-helpers.js";
 
 // ── Schemas ──
+import "./schemas/setup-openapi.js";
 export { generateRequestSchema, generateResponseSchema } from "./schemas/generate.schemas.js";
 export { agentRequestSchema, agentResponseSchema, approveRequestSchema, agentPatchSchema } from "./schemas/agents.schemas.js";
 export { memoryEntrySchema, memorySaveSchema } from "./schemas/memory.schemas.js";
