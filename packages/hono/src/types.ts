@@ -23,7 +23,7 @@ export interface VoiceConfig {
 }
 
 export interface AIPluginInstance {
-  app: OpenAPIHono;
+  router: OpenAPIHono;
   agents: AgentRegistry;
   tools: ToolRegistry;
   cards: CardRegistry;

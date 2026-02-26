@@ -45,7 +45,12 @@ export function createAIPlugin(config: AIPluginConfig): AIPluginInstance {
     agents,
     tools,
     storage,
-    model: config.model,
+    model: config.model ?? (() => {
+      throw new Error(
+        "No AI model configured. Set the model option in your plugin config.\n" +
+        "See: https://sdk.vercel.ai/providers/ai-sdk-providers",
+      );
+    }),
     voice,
     cards,
     maxDelegationDepth: config.maxDelegationDepth ?? DEFAULTS.MAX_DELEGATION_DEPTH,
@@ -106,7 +111,7 @@ export function createAIPlugin(config: AIPluginConfig): AIPluginInstance {
   configureOpenAPI(app, config.openapi);
 
   return {
-    app,
+    router: app,
     agents,
     tools,
     cards,
