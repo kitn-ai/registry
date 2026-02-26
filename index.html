@@ -8,22 +8,37 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0a0a0b;
-      --surface: #141416;
-      --surface-hover: #1a1a1e;
-      --border: #2a2a2e;
-      --text: #e4e4e7;
-      --text-dim: #71717a;
-      --text-muted: #52525b;
-      --accent: #22c55e;
-      --accent-dim: #16a34a;
-      --blue: #3b82f6;
-      --purple: #a78bfa;
-      --orange: #fb923c;
-      --pink: #f472b6;
-      --cyan: #22d3ee;
-      --tag-bg: #1e1e22;
-      --tag-border: #2e2e34;
+      --bg: #09090b;
+      --surface: #131318;
+      --border: #26252e;
+      --border-subtle: #1c1b24;
+
+      /* Text — Apple-inspired contrast hierarchy */
+      --text: #f5f5f7;
+      --text-secondary: #a1a1a6;
+      --text-tertiary: #86868b;
+
+      /* Brand */
+      --brand: #e429a3;
+      --brand-hover: #f04db8;
+      --brand-subtle: rgba(228, 41, 163, 0.12);
+
+      /* Type colors — vibrant on dark */
+      --type-agent: #6bb1ff;
+      --type-tool: #c4a5ff;
+      --type-skill: #ffb366;
+      --type-storage: #5ee8a0;
+      --type-package: #5ce0f0;
+
+      /* Tags */
+      --tag-bg: rgba(245, 245, 247, 0.05);
+      --tag-border: rgba(245, 245, 247, 0.09);
+      --tag-text: #9d99a8;
+
+      --dep-bg: rgba(228, 41, 163, 0.06);
+      --dep-border: rgba(228, 41, 163, 0.14);
+      --dep-text: #b88da6;
+
       --radius: 8px;
       --max-w: 860px;
     }
@@ -52,10 +67,10 @@
       letter-spacing: -0.02em;
     }
 
-    header h1 span { color: var(--accent); }
+    header h1 span { color: var(--brand); }
 
     header p {
-      color: var(--text-dim);
+      color: var(--text-secondary);
       font-size: 0.875rem;
       margin-top: 0.25rem;
     }
@@ -75,11 +90,11 @@
       color: var(--text);
       font-size: 0.875rem;
       outline: none;
-      transition: border-color 0.15s;
+      transition: border-color 0.2s;
     }
 
-    .search-bar input::placeholder { color: var(--text-muted); }
-    .search-bar input:focus { border-color: var(--accent-dim); }
+    .search-bar input::placeholder { color: var(--text-tertiary); }
+    .search-bar input:focus { border-color: var(--brand); }
 
     .filters {
       max-width: var(--max-w);
@@ -95,21 +110,21 @@
       border: 1px solid var(--border);
       border-radius: 100px;
       background: transparent;
-      color: var(--text-dim);
+      color: var(--text-secondary);
       font-size: 0.8125rem;
       cursor: pointer;
       transition: all 0.15s;
     }
 
-    .filter-btn:hover { border-color: var(--text-muted); color: var(--text); }
-    .filter-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .filter-btn:hover { border-color: var(--text-tertiary); color: var(--text); }
+    .filter-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
 
     .count {
       max-width: var(--max-w);
       margin: 1.25rem auto 0;
       padding: 0 1.5rem;
       font-size: 0.8125rem;
-      color: var(--text-muted);
+      color: var(--text-tertiary);
     }
 
     main {
@@ -125,7 +140,7 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--text-muted);
+      color: var(--text-tertiary);
       padding-bottom: 0.5rem;
       border-bottom: 1px solid var(--border);
       margin-bottom: 0.25rem;
@@ -137,7 +152,7 @@
       align-items: start;
       gap: 1rem;
       padding: 0.75rem 0;
-      border-bottom: 1px solid #1a1a1e;
+      border-bottom: 1px solid var(--border-subtle);
     }
 
     .item:last-child { border-bottom: none; }
@@ -145,12 +160,11 @@
     .item-name {
       font-size: 0.9375rem;
       font-weight: 500;
-      color: var(--text);
     }
 
     .item-desc {
       font-size: 0.8125rem;
-      color: var(--text-dim);
+      color: var(--text-secondary);
       margin-top: 0.125rem;
     }
 
@@ -167,13 +181,13 @@
       border-radius: 100px;
       background: var(--tag-bg);
       border: 1px solid var(--tag-border);
-      color: var(--text-muted);
+      color: var(--tag-text);
     }
 
     .dep-tag {
-      background: transparent;
-      border-color: var(--border);
-      color: var(--text-muted);
+      background: var(--dep-bg);
+      border-color: var(--dep-border);
+      color: var(--dep-text);
     }
 
     .copy-btn {
@@ -182,7 +196,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: var(--surface);
-      color: var(--text-dim);
+      color: var(--text-secondary);
       font-size: 0.75rem;
       font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
       cursor: pointer;
@@ -190,31 +204,31 @@
       align-self: center;
     }
 
-    .copy-btn:hover { border-color: var(--accent-dim); color: var(--text); }
+    .copy-btn:hover { border-color: var(--brand); color: var(--text); }
 
     .copy-btn.copied {
-      border-color: var(--accent);
-      color: var(--accent);
+      border-color: var(--brand);
+      color: var(--brand);
     }
 
     .empty {
       text-align: center;
       padding: 3rem 1rem;
-      color: var(--text-muted);
+      color: var(--text-tertiary);
       font-size: 0.875rem;
     }
 
     .loading {
       text-align: center;
       padding: 4rem 1rem;
-      color: var(--text-muted);
+      color: var(--text-tertiary);
     }
 
-    .type-color-agent { color: var(--blue); }
-    .type-color-tool { color: var(--purple); }
-    .type-color-skill { color: var(--orange); }
-    .type-color-storage { color: var(--pink); }
-    .type-color-package { color: var(--cyan); }
+    .type-color-agent { color: var(--type-agent); }
+    .type-color-tool { color: var(--type-tool); }
+    .type-color-skill { color: var(--type-skill); }
+    .type-color-storage { color: var(--type-storage); }
+    .type-color-package { color: var(--type-package); }
 
     footer {
       border-top: 1px solid var(--border);
@@ -223,12 +237,12 @@
     }
 
     footer a {
-      color: var(--text-muted);
+      color: var(--text-tertiary);
       font-size: 0.8125rem;
       text-decoration: none;
     }
 
-    footer a:hover { color: var(--text); }
+    footer a:hover { color: var(--brand); }
 
     @media (max-width: 640px) {
       .item { grid-template-columns: 1fr; gap: 0.5rem; }
