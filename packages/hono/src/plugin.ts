@@ -111,11 +111,8 @@ export function createAIPlugin(config: AIPluginConfig): AIPluginInstance {
   configureOpenAPI(app, config.openapi);
 
   return {
+    ...ctx,
     router: app,
-    agents,
-    tools,
-    cards,
-    voice,
     async initialize() {
       // Load persisted prompt overrides
       const overrides = await storage.prompts.loadOverrides();

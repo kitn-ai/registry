@@ -1,6 +1,7 @@
 import type { OpenAPIHono } from "@hono/zod-openapi";
 import type {
   CoreConfig,
+  PluginContext,
   AgentRegistry,
   ToolRegistry,
   AgentHandler,
@@ -22,12 +23,8 @@ export interface VoiceConfig {
   retainAudio?: boolean;
 }
 
-export interface AIPluginInstance {
+export interface AIPluginInstance extends PluginContext {
   router: OpenAPIHono;
-  agents: AgentRegistry;
-  tools: ToolRegistry;
-  cards: CardRegistry;
-  voice?: VoiceManager;
   initialize(): Promise<void>;
   createHandlers(config: { tools: Record<string, any>; maxSteps?: number }): {
     sseHandler: AgentHandler;
