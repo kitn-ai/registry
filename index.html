@@ -13,24 +13,20 @@
       --border: #26252e;
       --border-subtle: #1c1b24;
 
-      /* Text — Apple-inspired contrast hierarchy */
       --text: #f5f5f7;
       --text-secondary: #a1a1a6;
       --text-tertiary: #86868b;
 
-      /* Brand */
       --brand: #e429a3;
       --brand-hover: #f04db8;
       --brand-subtle: rgba(228, 41, 163, 0.12);
 
-      /* Type colors — cohesive bold palette derived from brand pink */
       --type-agent: #6366f1;
       --type-tool: #a855f7;
       --type-skill: #f59e0b;
       --type-storage: #14b8a6;
       --type-package: #06b6d4;
 
-      /* Tags */
       --tag-bg: rgba(245, 245, 247, 0.05);
       --tag-border: rgba(245, 245, 247, 0.09);
       --tag-text: #9d99a8;
@@ -75,9 +71,54 @@
       margin-top: 0.25rem;
     }
 
+    .registry-selector {
+      max-width: var(--max-w);
+      margin: 1.25rem auto 0;
+      padding: 0 1.5rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .registry-selector .label {
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      margin-right: 0.25rem;
+    }
+
+    .registry-btn {
+      padding: 0.375rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .registry-btn:hover { border-color: var(--text-tertiary); color: var(--text); }
+    .registry-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+    .registry-info {
+      max-width: var(--max-w);
+      margin: 0.75rem auto 0;
+      padding: 0 1.5rem;
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+    }
+
+    .registry-info a {
+      color: var(--brand);
+      text-decoration: none;
+    }
+
+    .registry-info a:hover { text-decoration: underline; }
+
     .search-bar {
       max-width: var(--max-w);
-      margin: 1.5rem auto 0;
+      margin: 1rem auto 0;
       padding: 0 1.5rem;
     }
 
@@ -254,9 +295,14 @@
   <header>
     <div class="inner">
       <h1><span>kitn</span> registry</h1>
-      <p>Components for building AI agent systems</p>
+      <p>Directory of kitn component registries</p>
     </div>
   </header>
+
+  <div class="registry-selector" id="registrySelector">
+    <span class="label">Registry:</span>
+  </div>
+  <div class="registry-info" id="registryInfo"></div>
 
   <div class="search-bar">
     <input type="text" id="search" placeholder="Search components..." autocomplete="off" spellcheck="false">
@@ -264,7 +310,7 @@
 
   <div class="filters" id="filters"></div>
   <div class="count" id="count"></div>
-  <main id="content"><div class="loading">Loading registry...</div></main>
+  <main id="content"><div class="loading">Loading registries...</div></main>
 
   <footer>
     <a href="https://github.com/kitn-ai/kitn">github.com/kitn-ai/kitn</a>
@@ -274,14 +320,68 @@
     const TYPE_ORDER = ["agent", "tool", "skill", "storage", "package"];
     const TYPE_LABELS = { agent: "Agents", tool: "Tools", skill: "Skills", storage: "Storage", package: "Packages" };
 
+    let registries = [];
+    let activeRegistry = null;
     let items = [];
     let activeType = null;
     let searchQuery = "";
 
     async function init() {
       try {
-        const res = await fetch("./r/registry.json");
+        const res = await fetch("./registries.json");
         if (!res.ok) throw new Error(res.statusText);
+        registries = await res.json();
+        buildRegistrySelector();
+
+        // Default to @kitn (first registry)
+        if (registries.length > 0) {
+          await selectRegistry(registries[0]);
+        }
+      } catch (err) {
+        document.getElementById("content").innerHTML =
+          `<div class="empty">Failed to load registries. <br><span style="color:var(--text-tertiary)">${err.message}</span></div>`;
+      }
+    }
+
+    function buildRegistrySelector() {
+      const container = document.getElementById("registrySelector");
+      for (const reg of registries) {
+        const btn = document.createElement("button");
+        btn.className = "registry-btn";
+        btn.textContent = reg.name;
+        btn.dataset.name = reg.name;
+        btn.onclick = () => selectRegistry(reg);
+        container.appendChild(btn);
+      }
+    }
+
+    async function selectRegistry(reg) {
+      activeRegistry = reg;
+      activeType = null;
+      searchQuery = "";
+      document.getElementById("search").value = "";
+
+      // Update selector buttons
+      document.querySelectorAll(".registry-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.name === reg.name);
+      });
+
+      // Show registry info
+      const info = document.getElementById("registryInfo");
+      const parts = [];
+      if (reg.description) parts.push(reg.description);
+      if (reg.homepage) parts.push(`<a href="${esc(reg.homepage)}">${esc(reg.homepage)}</a>`);
+      info.innerHTML = parts.join(" &mdash; ");
+
+      // Load components
+      document.getElementById("content").innerHTML = `<div class="loading">Loading ${esc(reg.name)} components...</div>`;
+      document.getElementById("filters").innerHTML = "";
+      document.getElementById("count").textContent = "";
+
+      try {
+        const indexUrl = resolveIndexUrl(reg.url);
+        const res = await fetch(indexUrl);
+        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         const data = await res.json();
         items = data.items.map(item => ({
           ...item,
@@ -291,8 +391,15 @@
         render();
       } catch (err) {
         document.getElementById("content").innerHTML =
-          `<div class="empty">Failed to load registry. <br><span style="color:var(--text-muted)">${err.message}</span></div>`;
+          `<div class="empty">Failed to load components from ${esc(reg.name)}.<br><span style="color:var(--text-tertiary)">${err.message}</span></div>`;
       }
+    }
+
+    function resolveIndexUrl(urlTemplate) {
+      // Extract base URL from the template (everything before {type})
+      const idx = urlTemplate.indexOf("{type}");
+      if (idx === -1) return urlTemplate;
+      return urlTemplate.substring(0, idx) + "registry.json";
     }
 
     function buildFilters() {
@@ -302,6 +409,8 @@
       }
 
       const container = document.getElementById("filters");
+      container.innerHTML = "";
+
       const allBtn = document.createElement("button");
       allBtn.className = "filter-btn active";
       allBtn.textContent = `All (${items.length})`;
@@ -331,6 +440,9 @@
 
     function render() {
       const q = searchQuery.toLowerCase();
+      const ns = activeRegistry ? activeRegistry.name : "";
+      const isDefault = ns === "@kitn";
+
       const filtered = items.filter(item => {
         if (activeType && item.typeShort !== activeType) return false;
         if (q) {
@@ -374,13 +486,15 @@
             .join("");
           const meta = cats + deps;
 
+          const addName = isDefault ? item.name : `${ns}/${item.name}`;
+
           html += `<div class="item">
             <div>
               <div class="item-name"><span class="type-color-${item.typeShort}">${esc(item.name)}</span></div>
               <div class="item-desc">${esc(item.description)}</div>
               ${meta ? `<div class="item-meta">${meta}</div>` : ""}
             </div>
-            <button class="copy-btn" onclick="copyInstall(this, '${esc(item.name)}')">kitn add ${esc(item.name)}</button>
+            <button class="copy-btn" onclick="copyInstall(this, '${esc(addName)}')">kitn add ${esc(addName)}</button>
           </div>`;
         }
         html += `</div>`;

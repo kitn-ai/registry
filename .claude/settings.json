@@ -1,11 +1,5 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(bun run build)",
-      "Bash(bun run validate)",
-      "Bash(bun run stage)",
-      "Bash(bun run typecheck)",
-      "Bash(bun test)"
-    ]
+    "allow": []
   }
 }
