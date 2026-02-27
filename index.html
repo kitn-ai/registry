@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>kitn registry</title>
+  <title>kitn registries</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -12,11 +12,9 @@
       --surface: #131318;
       --border: #26252e;
       --border-subtle: #1c1b24;
-
       --text: #f5f5f7;
       --text-secondary: #a1a1a6;
       --text-tertiary: #86868b;
-
       --brand: #e429a3;
       --brand-hover: #f04db8;
       --brand-subtle: rgba(228, 41, 163, 0.12);
@@ -252,6 +250,41 @@
       color: var(--brand);
     }
 
+    .how-to {
+      max-width: var(--max-w);
+      margin: 2rem auto;
+      padding: 2rem 1.5rem 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .how-to h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .how-to p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .how-to code {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.125rem 0.375rem;
+      font-size: 0.8125rem;
+    }
+
+    .how-to a {
+      color: var(--brand);
+      text-decoration: none;
+    }
+
+    .how-to a:hover { text-decoration: underline; }
+
     .empty {
       text-align: center;
       padding: 3rem 1rem;
@@ -294,8 +327,8 @@
 <body>
   <header>
     <div class="inner">
-      <h1><span>kitn</span> registry</h1>
-      <p>Directory of kitn component registries</p>
+      <h1><span>kitn</span> registries</h1>
+      <p>Public directory of kitn component registries</p>
     </div>
   </header>
 
@@ -311,6 +344,17 @@
   <div class="filters" id="filters"></div>
   <div class="count" id="count"></div>
   <main id="content"><div class="loading">Loading registries...</div></main>
+
+  <div class="how-to" id="howTo" style="display:none">
+    <h2>Add your registry</h2>
+    <p>
+      Host a kitn-compatible component registry, then
+      <a href="https://github.com/kitn-ai/registry">open a PR</a>
+      to add your entry to <code>registries.json</code>.
+    </p>
+    <p>Users can then install your components with:</p>
+    <p><code>kitn registry add @yourteam https://your-domain.com/r/{type}/{name}.json</code></p>
+  </div>
 
   <footer>
     <a href="https://github.com/kitn-ai/kitn">github.com/kitn-ai/kitn</a>
@@ -332,14 +376,17 @@
         if (!res.ok) throw new Error(res.statusText);
         registries = await res.json();
         buildRegistrySelector();
+        document.getElementById("howTo").style.display = "";
 
-        // Default to @kitn (first registry)
         if (registries.length > 0) {
           await selectRegistry(registries[0]);
+        } else {
+          document.getElementById("content").innerHTML =
+            `<div class="empty">No registries registered yet.</div>`;
         }
       } catch (err) {
         document.getElementById("content").innerHTML =
-          `<div class="empty">Failed to load registries. <br><span style="color:var(--text-tertiary)">${err.message}</span></div>`;
+          `<div class="empty">Failed to load registries.<br><span style="color:var(--text-tertiary)">${err.message}</span></div>`;
       }
     }
 
@@ -355,25 +402,28 @@
       }
     }
 
+    function resolveIndexUrl(urlTemplate) {
+      const idx = urlTemplate.indexOf("{type}");
+      if (idx === -1) return urlTemplate;
+      return urlTemplate.substring(0, idx) + "registry.json";
+    }
+
     async function selectRegistry(reg) {
       activeRegistry = reg;
       activeType = null;
       searchQuery = "";
       document.getElementById("search").value = "";
 
-      // Update selector buttons
       document.querySelectorAll(".registry-btn").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.name === reg.name);
       });
 
-      // Show registry info
       const info = document.getElementById("registryInfo");
       const parts = [];
       if (reg.description) parts.push(reg.description);
       if (reg.homepage) parts.push(`<a href="${esc(reg.homepage)}">${esc(reg.homepage)}</a>`);
       info.innerHTML = parts.join(" &mdash; ");
 
-      // Load components
       document.getElementById("content").innerHTML = `<div class="loading">Loading ${esc(reg.name)} components...</div>`;
       document.getElementById("filters").innerHTML = "";
       document.getElementById("count").textContent = "";
@@ -393,13 +443,6 @@
         document.getElementById("content").innerHTML =
           `<div class="empty">Failed to load components from ${esc(reg.name)}.<br><span style="color:var(--text-tertiary)">${err.message}</span></div>`;
       }
-    }
-
-    function resolveIndexUrl(urlTemplate) {
-      // Extract base URL from the template (everything before {type})
-      const idx = urlTemplate.indexOf("{type}");
-      if (idx === -1) return urlTemplate;
-      return urlTemplate.substring(0, idx) + "registry.json";
     }
 
     function buildFilters() {

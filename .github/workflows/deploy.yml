@@ -1,4 +1,4 @@
-name: Deploy Registry to GitHub Pages
+name: Deploy Registry Directory to GitHub Pages
 
 on:
   push:
@@ -22,8 +22,7 @@ jobs:
 
       - name: Prepare Pages artifact
         run: |
-          mkdir -p _site/r
-          cp -r r/* _site/r/
+          mkdir -p _site
           cp index.html _site/index.html
           cp registries.json _site/registries.json
 
