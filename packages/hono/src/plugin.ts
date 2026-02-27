@@ -16,7 +16,6 @@ import {
 import { configureOpenAPI } from "./lib/configure-openapi.js";
 
 // Route factories
-import { createHealthRoutes } from "./routes/health/health.route.js";
 import { createAgentsRoutes } from "./routes/agents/agents.routes.js";
 import { createToolsRoutes } from "./routes/tools/tools.routes.js";
 import { createGenerateRoutes } from "./routes/generate/generate.routes.js";
@@ -89,9 +88,6 @@ export function createAIPlugin(config: AIPluginConfig): AIPluginInstance {
   app.notFound((c) => {
     return c.json({ error: "Not Found" }, 404);
   });
-
-  // Health check
-  app.route("/health", createHealthRoutes(ctx));
 
   // Mount API routes
   app.route("/generate", createGenerateRoutes(ctx));
