@@ -251,7 +251,7 @@
   "installDir": "core",
   "docs": "Engine installed to your project. Import with: import { ... } from '@kitn/core'",
   "version": "1.0.0",
-  "updatedAt": "2026-02-27T00:04:47.597Z",
+  "updatedAt": "2026-02-27T00:05:46.100Z",
   "changelog": [
     {
       "version": "1.0.0",

@@ -85,10 +85,6 @@ export function createAIPlugin(config: AIPluginConfig): AIPluginInstance {
     return c.json({ error: "Internal Server Error" }, 500);
   });
 
-  app.notFound((c) => {
-    return c.json({ error: "Not Found" }, 404);
-  });
-
   // Mount API routes
   app.route("/generate", createGenerateRoutes(ctx));
   app.route("/tools", createToolsRoutes(ctx));
